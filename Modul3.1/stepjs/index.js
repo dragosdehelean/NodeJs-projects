@@ -14,8 +14,6 @@ app.get('/', (req, res) => {
    res.render('pages/index')
 });
 
-
-
 app.get('/db', async (req, res) => {
     try {
       const client = await pool.connect()
@@ -34,7 +32,7 @@ app.get('/hello', (req, res)=>{
 
 app.post('/hello', [
     // username must be an email
-    // check('email').isEmail(),
+    check('email').isEmail(),
     // password must be at least 5 chars long
     check('name').isLength({ min: 5 })
   ], 
