@@ -7,8 +7,9 @@
   },
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "node test.js"
+    "test": "node test.js",
+    "start": "node ./bin/www", 
+    "start-dev": "nodemon ./index.js"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
@@ -19,6 +20,8 @@
     "pg": "^7.4.3"
   },
   "devDependencies": {
+    "eslint": "^5.5.0",
+    "nodemon": "^1.18.4",
     "request": "^2.81.0",
     "tape": "^4.7.0"
   },

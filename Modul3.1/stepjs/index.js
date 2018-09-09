@@ -1,36 +1,19 @@
 const express = require('express');
 const app = express();
 
-const path = require('path');
+const { check, validationResult } = require('express-validator/check');
 
 const bodyParser = require('body-parser');
 
-// const validator = require('express-validator');
-
-const { check, validationResult } = require('express-validator/check');
-
-const PORT = process.env.PORT || 5000;
-const cool = require('cool-ascii-faces');
-
-const { Pool } = require('pg');
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: true
-});
-
-
-app.use(express.static(path.join(__dirname, 'public')));
-app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({ extended: false}));
-// app.use(validator());
+
 
 app.get('/', (req, res) => {
    res.render('pages/index')
 });
 
-app.get('/cool', (req, res) => res.send(cool()));
 
 
 app.get('/db', async (req, res) => {
@@ -63,4 +46,4 @@ app.post('/hello', [
     res.render('pages/hello', {name: req.body.name});
   })
 
-app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
+app.listen(5000, () => console.log(`Listening on port: 5000`))
