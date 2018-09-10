@@ -2,13 +2,13 @@
 <title>Formular</title>
 <% include ../partials/header.ejs %>
 
-<% if (typeof name !== 'undefined') console.log('bineee') %>
+<% if (typeof name !== 'undefined') console.log('A functionat') %>
 
 <div class="row">
 
-  <div class="col-md-4">
+  <div class="col-md-6">
     <h1>Hello Page</h1>
-    <form action="http://localhost:5000/hello" method="POST">
+    <form action="hello" method="POST">
       <div class="form-group has-warning">
         <label for="name">Nume</label>
         <input type="text" name="name" id="name" class="form-control form-control-warning">
