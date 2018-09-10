@@ -22,8 +22,6 @@ app.use((req, res, next) => {
   next();
 });
 
-
-
 /*********   
  RUTE
 **********/
@@ -33,22 +31,8 @@ app.get('/', (req, res) => {
 });
 
 app.get('/New-page', (req, res) => {
-  
-  // res.locals.mesaj = res.mesaj;
   res.render('pages/new-page', {mesajul_meu: res.mesaj});
 });
-
-// app.get('/db', async (req, res) => {
-//     try {
-//       const client = await pool.connect()
-//       const result = await client.query('SELECT * FROM test_table');
-//       res.render('pages/db', result);
-//       client.release();
-//     } catch (err) {
-//       console.error(err);
-//       res.send("Error " + err);
-//     }
-//   });
 
 app.get('/hello', (req, res)=>{
   res.render('pages/hello');
