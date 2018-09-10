@@ -17,23 +17,11 @@ app.use(bodyParser.urlencoded({ extended: false}));
 // permite afisarea asset-urilor din directorul "/public"
 app.use('/static', express.static('public'));
 
-// app.use((req, res, next) => {
-//   console.log('Mesaj 1');
-//   next();
-// }, (req, res, next) => {
-//     console.log('Mesaj 1.5');
-//     next();
-// });
-
-// app.use((req, res, next) => {
-//   console.log('Mesaj 2');
-//   next();
-// });
-
 app.use((req, res, next) => {
-  
+  res.mesaj = `Userul a venit de la adresa ${req.headers.referer}`;
   next();
 });
+
 
 
 /*********   
@@ -45,7 +33,9 @@ app.get('/', (req, res) => {
 });
 
 app.get('/New-page', (req, res) => {
-  res.render('pages/new-page');
+  
+  // res.locals.mesaj = res.mesaj;
+  res.render('pages/new-page', {mesajul_meu: res.mesaj});
 });
 
 // app.get('/db', async (req, res) => {
