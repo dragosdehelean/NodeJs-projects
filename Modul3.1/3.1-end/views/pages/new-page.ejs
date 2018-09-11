@@ -3,10 +3,16 @@
 <% include ../partials/header.ejs %>
 
   <div class="alert alert-warning" role="alert">
-  
-    <%= mesajul_meu %>
+
+      <ul>
+          <% results.forEach(function(r) { %>
+              <li><%= r.EmployeeId %> - <%= r.LastName %></li>
+          <% }); %>
+      </ul>
 
   </div>
+
+
  
   <div class="row">
     <div class="col-md-6">
