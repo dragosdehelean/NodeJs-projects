@@ -1,0 +1,35 @@
+<% include ../partials/meta.ejs %>
+<title>Formular</title>
+<% include ../partials/header.ejs %>
+
+<% 
+  if ((typeof nume !== 'undefined') && (typeof nume !== 'undefined')){
+%>
+    A functiona! Numele este: <%= nume %>, Email-ul este: <%= email %> 
+<% 
+}
+%>
+
+<div class="row">
+
+  <div class="col-md-6">
+    <h1>Hello Page</h1>
+
+    <form action="/hello" method="POST">
+      <div class="form-group has-warning">
+        <label for="nume">Nume</label>
+        <input type="text" name="nume" id="nume" class="form-control form-control-warning">
+      </div>
+      <div class="form-group has-warning">
+        <label for="email">Email</label>
+        <input type="text" name="email" id="email" class="form-control form-control-warning">
+      </div>   
+
+      <button type="submit" class="btn">Submit</button>
+    </form>
+
+  </div>
+
+</div> <!-- row -->
+
+<% include ../partials/footer.ejs %>

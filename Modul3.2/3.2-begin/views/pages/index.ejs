@@ -1,0 +1,34 @@
+<% include ../partials/meta.ejs %>
+<title>Welcome</title>
+<% include ../partials/header.ejs %>
+  
+  <%= preferinte + ' test' %>
+  <div class="row">
+    <div class="col-md-12 text-center">
+      
+    <%       
+      if (preferinte === "fete"){   
+    %>
+      <img src= "/static/keep_calm.gif" >
+    <% 
+      } else { 
+    %>
+      <img src= "http://thagomizer.com/img/avatar_small.jpg">
+    <%
+     } 
+    %>
+      
+
+      <!-- 
+        if (preferinte === "fete"){ 
+        ...
+        } else { 
+        ...         
+        }
+
+      -->
+
+    </div>
+  </div>
+
+<% include ../partials/footer.ejs %>
