@@ -13,13 +13,14 @@ MIDDLEWARE
 
 /**
  * Insereaza middleware-ul pentru parsarea requesturilor transmise prin formulare POST
- * Creaza un obiect .body pe req, in care se vor regasi perechile de chei/valori transmise prin formular
+ * Efect: pe obiectul req.body vor aparea perechile de chei/valori transmise prin formular
  */
 app.use(bodyParser.urlencoded({extended: false}));
 
 // seteaza directorul "/public" pentru a afisa asset-uri statice
 app.use('/static', express.static('public'));
 
+//middleware de test
 app.use((req, res, next) => {
   res.mesaj = `Userul a venit de la adresa ${req.headers.referer}`;
   next();
@@ -30,7 +31,7 @@ app.use((req, res, next) => {
 **********/
 
 app.get('/', (req, res) => {  
-  res.render('pages/index', {preferinte: "necunoscute" })
+  res.render('pages/index')
 });
 
 app.get('/New-page', (req, res) => {   

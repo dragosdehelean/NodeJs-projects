@@ -31,15 +31,20 @@ MIDDLEWARE
 
 /**
  * Insereaza middleware-ul pentru parsarea requesturilor transmise prin formulare POST
- * Creaza un obiect .body pe req, in care se vor regasi perechile de chei/valori transmise prin formular
+ * Efect: pe obiectul req.body vor aparea perechile de chei/valori transmise prin formular
  */
 app.use(bodyParser.urlencoded({extended: false}));
 
+/**
+ * Insereaza middleware-ul pentru citirea si parsarea cookie-urilor
+ * Efect: pe obiectul req.cookies vor aparea perechile de chei/valori din cookie-urile setate de aplicatia noastra
+ */
 app.use(cookieParser());
 
 // seteaza directorul "/public" pentru a afisa asset-uri statice
 app.use('/static', express.static('public'));
 
+// middleware de test
 app.use((req, res, next) => {
   res.mesaj = `Userul a venit de la adresa ${req.headers.referer}`;
   next();
@@ -51,7 +56,7 @@ app.use((req, res, next) => {
 
 app.get('/', (req, res) => {
   
-  res.render('pages/index', {name: req.cookies.name})
+  res.render('pages/index', {nume: req.cookies.nume})
 });
 
 app.get('/New-page', (req, res) => {
@@ -65,8 +70,15 @@ app.get('/New-page', (req, res) => {
     else
       console.log('Error while performing Query.' + err);
   });  
-  
+
 });
+
+app.post('/goodbye', (req, res) => {
+
+  res.clearCookie('nume');
+
+  res.redirect('/hello');
+})
 
 app.get('/hello', (req, res) => {
   res.render('pages/hello');
@@ -85,7 +97,7 @@ app.post('/hello', [
     // }
     // res.render('pages/hello', {name: req.body.name, email: req.body.email});   
     
-    res.cookie(nume, req.body.nume);
+    res.cookie('nume', req.body.nume);
     res.redirect('/');
 
   })
