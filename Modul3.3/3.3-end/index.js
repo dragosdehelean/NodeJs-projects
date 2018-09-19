@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
 
-
 const {
   check,
   validationResult
@@ -21,6 +20,8 @@ const con = mysql.createConnection({
   password: '',
   database: 'northwind'
 });
+
+const cards = require('./data/data.json').data.cards;
 
 
 // seteaza template engine-ul aplicatiei
@@ -56,7 +57,7 @@ app.use((req, res, next) => {
 **********/
 
 app.get('/', (req, res) => {
-  
+  console.log(cards[0].question);
   res.render('pages/index', {nume: req.cookies.nume})
 });
 
