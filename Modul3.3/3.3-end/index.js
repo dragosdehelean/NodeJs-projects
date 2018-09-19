@@ -1,25 +1,15 @@
 const express = require('express');
 const app = express();
 
-const {
-  check,
-  validationResult
-} = require('express-validator/check');
+const expressValidator = require('express-validator');
 
 // importa modulul body-parser pentru a gestiona requesturile POST
 const bodyParser = require('body-parser');
 
-const mysql = require('mysql');
-
 const cookieParser = require('cookie-parser');
 
-// Conexiunea la baza de date MySQL
-const con = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'northwind'
-});
+const expressSession = require('express-session');
+
 
 const cards = require('./data/data.json').data.cards;
 
@@ -37,6 +27,8 @@ MIDDLEWARE
  */
 app.use(bodyParser.urlencoded({extended: false}));
 
+app.use(expressValidator());
+
 /**
  * Insereaza middleware-ul pentru citirea si parsarea cookie-urilor
  * Efect: pe obiectul req.cookies vor aparea perechile de chei/valori din cookie-urile setate de aplicatia noastra
@@ -46,18 +38,24 @@ app.use(cookieParser());
 // seteaza directorul "/public" pentru a afisa asset-uri statice
 app.use('/static', express.static('public'));
 
+app.use(expressSession({secret: 'max', saveUninitialized: false, resave: false}));
+
 // middleware de test
 app.use((req, res, next) => {
   res.mesaj = `Userul a venit de la adresa ${req.headers.referer}`;
   next();
 });
 
+
+
 /*********   
  RUTE
 **********/
 
 app.get('/', (req, res) => {
-  console.log(cards[0].question);
+  //console.dir(check);
+
+  console.log(req.session.mesaj);
   res.render('pages/index', {nume: req.cookies.nume})
 });
 
