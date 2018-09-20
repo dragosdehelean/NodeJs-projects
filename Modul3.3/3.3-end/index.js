@@ -1,18 +1,13 @@
 const express = require('express');
 const app = express();
 
-const expressValidator = require('express-validator');
-
 // importa modulul body-parser pentru a gestiona requesturile POST
 const bodyParser = require('body-parser');
-
 const cookieParser = require('cookie-parser');
-
 const expressSession = require('express-session');
-
+const { check, validationResult } = require('express-validator/check');
 
 const cards = require('./data/data.json').data.cards;
-
 
 // seteaza template engine-ul aplicatiei
 app.set('view engine', 'ejs');
@@ -27,8 +22,6 @@ MIDDLEWARE
  */
 app.use(bodyParser.urlencoded({extended: false}));
 
-app.use(expressValidator());
-
 /**
  * Insereaza middleware-ul pentru citirea si parsarea cookie-urilor
  * Efect: pe obiectul req.cookies vor aparea perechile de chei/valori din cookie-urile setate de aplicatia noastra
@@ -40,12 +33,10 @@ app.use('/static', express.static('public'));
 
 app.use(expressSession({secret: 'max', saveUninitialized: false, resave: false}));
 
-// middleware de test
-app.use((req, res, next) => {
-  res.mesaj = `Userul a venit de la adresa ${req.headers.referer}`;
+app.use((req, res, next)=>{
+  req.session.mesaj = "acesta este un mesaj custom";
   next();
-});
-
+})
 
 
 /*********   
@@ -53,10 +44,7 @@ app.use((req, res, next) => {
 **********/
 
 app.get('/', (req, res) => {
-  //console.dir(check);
-
-  console.log(req.session.mesaj);
-  res.render('pages/index', {nume: req.cookies.nume})
+  res.render('pages/index', {nume: req.cookies.nume, mesaj: req.session.mesaj})
 });
 
 app.get('/New-page', (req, res) => {
@@ -79,25 +67,23 @@ app.post('/goodbye', (req, res) => {
 })
 
 app.get('/hello', (req, res) => {
-  res.render('pages/hello');
+  res.render('pages/hello', {  
+    errors: req.session.errors 
+  });
+  req.session.errors = null;
 });
 
-app.post('/hello', [
-    // username must be an email
-    // check('email').isEmail(),
-    // password must be at least 2 chars long
-    // check('name').isLength({      min: 2     })
-  ],
-  (req, res) => {
-    // const errors = validationResult(req);
-    // if (!errors.isEmpty()) {
-    //   return res.status(422).json({ errors: errors.array() });
-    // }
-    // res.render('pages/hello', {name: req.body.name, email: req.body.email});   
-    
-    res.cookie('nume', req.body.nume);
-    res.redirect('/');
-
-  })
+app.post('/hello',
+  check('email', 'Invalid email address').isEmail(),
+  check('nume', 'Numele este prea scurt').isLength({min: 1}), 
+  (req, res) => {  
+    const errors = validationResult(req);
+    if (errors) {
+        req.session.errors = errors.array();
+        res.redirect('/hello');
+    } else {
+        res.redirect('/');
+    }  
+});
 
 app.listen(5000, () => console.log(`Listening on port: 5000`))
