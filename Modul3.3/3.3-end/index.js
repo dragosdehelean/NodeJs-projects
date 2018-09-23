@@ -1,6 +1,11 @@
 const express = require('express');
 const app = express();
 
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 8000;
+}
+
 // importa modulul body-parser pentru a gestiona requesturile POST
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -51,8 +56,7 @@ app.get('/New-page', (req, res) => {
     
   con.query('SELECT * FROM employees', (err, results, fields) => {
     //console.log(results);   
-    if (!err) {
-      
+    if (!err) {      
       res.render('pages/new-page', {results: results});
     }     
     else
@@ -67,10 +71,10 @@ app.post('/goodbye', (req, res) => {
 })
 
 app.get('/hello', (req, res) => {
-  res.render('pages/hello', {  
-    errors: req.session.errors 
+  res.render('pages/hello', {
+    data: {},
+    errors: {}
   });
-  req.session.errors = null;
 });
 
 app.post('/hello',
@@ -78,12 +82,11 @@ app.post('/hello',
   check('nume', 'Numele este prea scurt').isLength({min: 1}), 
   (req, res) => {  
     const errors = validationResult(req);
-    if (errors) {
-        req.session.errors = errors.array();
-        res.redirect('/hello');
+    if (!errors.isEmpty()) {
+      res.render('pages/hello', {errors: errors.mapped()});
     } else {
-        res.redirect('/');
+      res.redirect('/');
     }  
 });
 
-app.listen(5000, () => console.log(`Listening on port: 5000`))
+app.listen(port, () => console.log(`Listening on port: ${port}`))

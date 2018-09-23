@@ -1,6 +1,11 @@
 const express = require('express');
 const app = express();
 
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 8000;
+}
+
 // importa modulul body-parser pentru a putea citi datele trimise prin POST
 const bodyParser = require('body-parser');
 
@@ -61,4 +66,4 @@ app.post('/goodbye', (req, res) => {
   res.redirect('/hello');
 })
 
-app.listen(5000, () => console.log(`Listening on port: 5000`));
+app.listen(port, () => console.log(`Listening on port: ${port}`));
