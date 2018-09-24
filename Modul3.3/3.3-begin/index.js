@@ -14,7 +14,7 @@ const app = express();
 // portul default (pentru compatibilitate cu Heroku) 
 let port = process.env.PORT;
 if (port == null || port == "") {
-  port = 5000;
+  port = 8000;
 }
 
 // seteaza template engine-ul aplicatiei
