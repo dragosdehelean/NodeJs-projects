@@ -4,15 +4,21 @@
 
   <div class="row">
     <div class="col-md-12 text-center"> 
-      <% if (typeof nume !== 'undefined') { %>
-        <h1>Welcome, <%= nume %>!</h1> 
-        <form action='/goodbye' method="POST">
-          <button type="submit" class="btn btn-info">Goodbye!</button>
-        </form>
+        <% if (typeof flashMessage !== 'undefined') { %>          
+          <div class="alert alert-success" role="alert">
+            <%= flashMessage %>
+          </div>     
+        <% } %>
 
-      <% } else { %>
-        <h1>Welcome, student!</h1>       
-      <% } %>
+        <% if (typeof nume !== 'undefined') { %>
+          <h1>Welcome, <%= nume %>!</h1> 
+          <form action='/goodbye' method="POST">
+            <button type="submit" class="btn btn-info">Goodbye!</button>
+          </form>
+
+        <% } else { %>
+          <h1>Welcome, student!</h1>       
+        <% } %>
           
       <div class="mt-4">
         <img src= "/static/keep_calm.gif" >
