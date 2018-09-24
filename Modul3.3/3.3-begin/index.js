@@ -14,7 +14,7 @@ const app = express();
 // portul default (pentru compatibilitate cu Heroku) 
 let port = process.env.PORT;
 if (port == null || port == "") {
-  port = 8000;
+  port = 5000;
 }
 
 // seteaza template engine-ul aplicatiei
@@ -55,14 +55,17 @@ app.use('/static', express.static('public'));
 CUSTOM MIDDLEWARES
 ********************/
 
-// ....
+// emailul are un format valid
+const email_valid = check('email', 'Formatul email-ului e incorect').isEmail();
+// numele are mai mult de 1 caracter
+const name_valid = check('nume', 'Numele este prea scurt').isLength({ min: 3 });
 
 /*********   
  RUTE
 **********/
 
 app.get('/', (req, res) => {  
-  res.render('pages/index', {nume: req.cookies.nume})
+  res.render('pages/index')
 });
 
 app.get('/hello', (req, res) => {
@@ -72,19 +75,22 @@ app.get('/hello', (req, res) => {
   });
 });
 
-app.post('/hello', (req, res) => {   
-  // 1) Daca NU exista erori => redirect cu mesaj flash
-  
-    res.cookie('nume', req.body.nume);
-    res.redirect('/');
-  
-  // 2) Daca exista erori => afiseaza din nou formularul cu mesaje de eroare si datele completate anterior
-    
-    res.render('pages/hello', {
-      data: {},
-      errors: {}
-    });
-  
+app.post('/hello', email_valid, name_valid, 
+  (req, res) => {   
+    const errors = validationResult(req);
+
+    // 1) Daca NU exista erori => redirect cu mesaj flash 
+    if(errors.isEmpty()){
+      //res.cookie('nume', req.body.nume);
+      res.redirect('/');
+    } 
+    // 2) Daca exista erori => afiseaza din nou formularul cu mesaje de eroare si datele completate anterior
+     else {
+      res.render('pages/hello', {
+        data: req.body,
+        errors: errors.mapped() 
+      });
+    }
 })
 
 app.post('/goodbye', (req, res) => {
