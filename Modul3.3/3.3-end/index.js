@@ -60,23 +60,23 @@ CUSTOM MIDDLEWARES
 const email_valid = check('email', 'Formatul email-ului nu este corect').isEmail();
 const name_valid = check('nume', 'Numele este prea scurt').isLength({ min: 3 });
 
-// Custom flash middleware -- from Ethan Brown's book, 'Web Development with Node & Express'
+// Custom flash middleware
 app.use( (req, res, next) => {
   // if there's a flash message in the session request, make it available in the response, then delete it
-  res.locals.flashMessage = req.session.flashMessage;
-  delete req.session.flashMessage;
+  if (req.session.flashMessage){
+    res.locals.flashMessage = req.session.flashMessage;
+    delete req.session.flashMessage;
+  }  
   next();
 });
-
 
 /*********   
  RUTE
 **********/
 
 app.get('/', (req, res) => {
-  res.render('pages/index', {
-    nume: req.cookies.nume
-  });  
+  res.locals.nume = req.cookies.nume;
+  res.render('pages/index');   
 });
 
 app.get('/hello', (req, res) => {
