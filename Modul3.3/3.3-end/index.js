@@ -34,6 +34,8 @@ app.use(bodyParser.urlencoded({
   extended: false
 }));
 
+ app.use(bodyParser.json());
+
 /**
  * Middleware-ul pentru citirea si parsarea cookie-urilor
  * Efect: pe obiectul req.cookies vor aparea perechile de chei/valori din cookie-urile setate de aplicatia noastra
@@ -111,5 +113,12 @@ app.post('/goodbye', (req, res) => {
   res.clearCookie('nume');
   res.redirect('/hello');
 })
+
+app.post('/ajax_form', (req, res) => {
+  console.log(req.body.nume);
+  console.log(req.get('Content-Type'));
+  res.send('te aud');
+})
+
 
 app.listen(port, () => console.log(`Listening on port: ${port}`))
