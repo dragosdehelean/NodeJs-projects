@@ -7,48 +7,36 @@
   <div class="col-md-6">
     <h1>Hello Page</h1>
 
+    <% if ( Object.keys(errors).length > 0 ){ %>
+      <div class="alert alert-danger" role="alert">
+        <p>Au aparut urmatoarele erori:</p>
+        <ul>
+          <% Object.values(errors).forEach(error => { %>
+          <li>
+            <%= error.msg %>
+          </li>
+          <% }) %>
+        </ul>
+      </div>
+    <%        
+      }
+    %>
+
+    <form action="/hello" method="POST">
+      <div class="form-group">
+        <label for="nume">Nume</label>
+        <input type="text" name="nume" id="nume" class="form-control <%= errors.nume ? 'is-invalid' : ''%>" value="<%= data.nume %>">
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="text" name="email" id="email" class="form-control <%= errors.email ? 'is-invalid' : ''%>" value="<%= data.email %>">
+      </div>
+
+      <button type="submit" class="btn">Submit</button>
+    </form>
+
   </div>
 
 </div> <!-- row -->
-
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-  Launch demo modal
-</button>
-
-
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-
-      <form id="ajax_form" name="ajax_form">
-        <div class="modal-body">
-          <div class="form-group">
-            <label for="nume" class="col-form-label">Nume:</label>
-            <input type="text" class="form-control" id="nume" name="nume">
-          </div>
-          <div class="form-group">
-            <label for="email" class="col-form-label">Email:</label>
-            <input type="text" class="form-control" id="email" name="email">
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="submit">Send message</button>
-        </div>
-
-      </form>
-
-    </div>
-  </div>
-</div>
-
-<script src="static/js/ajax_form.js"></script>
 
 <% include ../partials/footer.ejs %>

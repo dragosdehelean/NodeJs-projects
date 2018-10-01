@@ -17,10 +17,13 @@ if (port == null || port == "") {
   port = 8000;
 }
 
+const cards = require('./data/data.json').data.cards;
+
+const queries = require('./data/db_queries.js');
+
+
 // seteaza template engine-ul aplicatiei
 app.set('view engine', 'ejs');
-
-const cards = require('./data/data.json').data.cards;
 
 /*******************   
 STANDARD MIDDLEWARES
@@ -34,7 +37,8 @@ app.use(bodyParser.urlencoded({
   extended: false
 }));
 
- app.use(bodyParser.json());
+app.use(bodyParser.json());
+
 
 /**
  * Middleware-ul pentru citirea si parsarea cookie-urilor
@@ -89,8 +93,7 @@ app.get('/hello', (req, res) => {
 });
 
 app.post('/hello', email_valid, name_valid,  
-  (req, res) => {
-    
+  (req, res) => {    
     // pune erorile din req in obiectul errors 
     const errors = validationResult(req);
     
@@ -114,11 +117,38 @@ app.post('/goodbye', (req, res) => {
   res.redirect('/hello');
 })
 
+
+/*********   
+ BD - Recipes
+**********/
+
+app.get('/recipes', queries.all_recipes, (req, res) => {  
+  res.render('pages/recipes', {recipes: req.all_recipes});
+});
+
 app.post('/ajax_form', (req, res) => {
-  console.log(req.body.nume);
-  console.log(req.get('Content-Type'));
-  res.send('te aud');
+  // pune erorile din req in obiectul errors 
+  const errors = validationResult(req);
+      
+  // 1) Daca nu exista erori => redirect cu mesaj flash
+  if (errors.isEmpty()) { 
+    queries.create_recipe(req.body.title, req.body.ingredients, req.body.directions);
+    res.json({ 
+      succes: true,
+      form_data: req.body,
+      errors: errors.mapped()
+    });
+  }  
+  // 2) Daca exista erori => trimite datele completate si erorile catre formular
+  else {     
+    res.json({
+      succes: false,
+      form_data: req.body,
+      errors: errors.mapped()
+    });
+  }
 })
+
 
 
 app.listen(port, () => console.log(`Listening on port: ${port}`))
