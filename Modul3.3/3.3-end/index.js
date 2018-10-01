@@ -126,7 +126,7 @@ app.get('/recipes', queries.all_recipes, (req, res) => {
   res.render('pages/recipes', {recipes: req.all_recipes});
 });
 
-app.post('/ajax_form', (req, res) => {
+app.post('/recipes/create', (req, res) => {
   // pune erorile din req in obiectul errors 
   const errors = validationResult(req);
       
@@ -148,7 +148,7 @@ app.post('/ajax_form', (req, res) => {
 });
 
 
-app.delete('/delete/:id', (req, res) =>{
+app.delete('/recipes/delete/:id', (req, res) =>{
 
   queries.deleteRecipe(req.params.id);
   res.sendStatus(200);

@@ -57,7 +57,7 @@ recipeList.addEventListener("click", (event)=>{
     console.log('mi-a dat click');
 
     const id = event.target.dataset.id;
-    const url = '/delete/' + id;
+    const url = '/recipes/delete/' + id;
 
     fetch(url, { method: 'DELETE' })
       .then(res => {
