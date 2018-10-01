@@ -20,9 +20,17 @@ module.exports = {
   },
 
   //creeaza o noua inregistrare 
-  create_recipe: (title, ingredients, directions) => {
+  createRecipe: (title, ingredients, directions) => {
     const sql = 'INSERT INTO recipes (title, ingredients, directions) VALUES (?, ?, ?)';
     pool.query( sql, [title, ingredients, directions], (error, results) => {
+      if (error) throw error    
+    }); 
+  },
+
+  //sterge o inregistrare in functie de id-ul primit 
+  deleteRecipe: (id) => {
+    const sql = 'DELETE FROM recipes WHERE recipe_id = ?';
+    pool.query( sql, [id], (error, results) => {
       if (error) throw error    
     }); 
   }

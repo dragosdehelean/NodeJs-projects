@@ -118,9 +118,9 @@ app.post('/goodbye', (req, res) => {
 })
 
 
-/*********   
+/************   
  BD - Recipes
-**********/
+*************/
 
 app.get('/recipes', queries.all_recipes, (req, res) => {  
   res.render('pages/recipes', {recipes: req.all_recipes});
@@ -130,16 +130,14 @@ app.post('/ajax_form', (req, res) => {
   // pune erorile din req in obiectul errors 
   const errors = validationResult(req);
       
-  // 1) Daca nu exista erori => redirect cu mesaj flash
+  // 1) Daca nu exista erori => trimite un raspuns json de succes
   if (errors.isEmpty()) { 
-    queries.create_recipe(req.body.title, req.body.ingredients, req.body.directions);
+    queries.createRecipe(req.body.title, req.body.ingredients, req.body.directions);
     res.json({ 
-      succes: true,
-      form_data: req.body,
-      errors: errors.mapped()
+      succes: true
     });
   }  
-  // 2) Daca exista erori => trimite datele completate si erorile catre formular
+  // 2) Daca exista erori => trimite un raspuns json de esec + datele completate si erorile catre formular
   else {     
     res.json({
       succes: false,
@@ -147,7 +145,16 @@ app.post('/ajax_form', (req, res) => {
       errors: errors.mapped()
     });
   }
+});
+
+
+app.delete('/delete/:id', (req, res) =>{
+
+  queries.deleteRecipe(req.params.id);
+  res.sendStatus(200);
 })
+
+
 
 
 

@@ -1,4 +1,5 @@
 const submit = document.getElementById("submit");
+const recipeList = document.getElementById("recipeList");
 
 submit.addEventListener("click", (event)=>{
     //anuleaza efectul default al butonului
@@ -14,12 +15,14 @@ submit.addEventListener("click", (event)=>{
             directions: document.getElementById('directions').value
         })
     })
+    // parseaza raspunsul JSON primit
     .then(response => response.json())
+    // foloseste datele parsate
     .then(data => {
      
       // Daca exista erori, le pune intr-un template literal 
       // la final le afiseaza intr-un div gol din formular
-      if (Object.keys(data.errors).length > 0) {
+      if (!data.succes) {
         let erori = 
           `<div class="alert alert-danger my-0 py-2" role="alert">
               <p>Au aparut urmatoarele erori:</p>
@@ -34,18 +37,36 @@ submit.addEventListener("click", (event)=>{
               `</ul>
             </div>`;
         document.getElementById('errors').innerHTML = erori;
-      } else {
-
-        console.log('succes')
+      } 
+      // Daca nu exista erori, redirecteaza cu mesaj de succes     
+      else {
+        window.location.href = '/recipes';
+        console.log('succes');
       }     
       
+    })
+    // scrie in consola eventualele erori aparute
+    .catch(err => {
+      console.log(err);
     });
 
 })
 
-function showErrors(data){
-  
- 
+recipeList.addEventListener("click", (event)=>{
+  if (event.target.value === "delete" ){
+    console.log('mi-a dat click');
+
+    const id = event.target.dataset.id;
+    const url = '/delete/' + id;
+
+    fetch(url, { method: 'DELETE' })
+      .then(res => {
+        console.log(res);
+        window.location.href = '/recipes';
+      })
 
 
-}
+  } else {   
+    console.log('NU mi-a dat click');
+  }  
+})
