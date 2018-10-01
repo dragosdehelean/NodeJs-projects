@@ -6,6 +6,11 @@
   <div class="col-md-9">
 
     <h1>My Recipes</h1>
+    <% if (typeof flashMessage !== 'undefined') { %>          
+      <div class="alert alert-success mt-3" role="alert">
+        <%= flashMessage %>
+      </div>     
+    <% } %>
 
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-primary btn-block my-4" data-toggle="modal" data-target="#exampleModal">
@@ -79,8 +84,8 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="submit">Send message</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Renunta</button>
+          <button type="button" class="btn btn-primary" id="submit">Salveaza</button>
         </div>
 
       </form>

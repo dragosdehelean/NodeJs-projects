@@ -10,6 +10,7 @@ const pool  = mysql.createPool({
 });
 
 module.exports = {
+  
   //middleware care face disponibil pe req rezultatele interogarii tabelului cu articole
   all_recipes: (req, res, next) => {
     pool.query('SELECT * FROM recipes ORDER BY created_at DESC', (error, results) => {
@@ -18,22 +19,6 @@ module.exports = {
       next(); 
     }); 
   },
-
-  //creeaza o noua inregistrare 
-  createRecipe: (title, ingredients, directions) => {
-    const sql = 'INSERT INTO recipes (title, ingredients, directions) VALUES (?, ?, ?)';
-    return pool.query( sql, [title, ingredients, directions], (error, results) => {
-      if (error) throw error    
-    }); 
-  },
-
-  //sterge o inregistrare in functie de id-ul primit 
-  deleteRecipe: (id) => {
-    const sql = 'DELETE FROM recipes WHERE recipe_id = ?';
-    return pool.query( sql, [id], (error, results) => {
-      if (error) throw error    
-    }); 
-  }
 
 };
 

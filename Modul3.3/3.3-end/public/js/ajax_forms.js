@@ -1,12 +1,13 @@
 const submit = document.getElementById("submit");
 const recipeList = document.getElementById("recipeList");
 
+// Actiunea pentru butonul de "create"
 submit.addEventListener("click", (event)=>{
     //anuleaza efectul default al butonului
     event.preventDefault();
     
     // trimitele datele din formular prin POST, in format JSON
-    fetch('/ajax_form', {
+    fetch('/recipes/create', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -52,6 +53,8 @@ submit.addEventListener("click", (event)=>{
 
 })
 
+// Actiunea pentru butonul de "delete" 
+// este ascultat elementul parinte, care contine toata lista
 recipeList.addEventListener("click", (event)=>{
   if (event.target.value === "delete" ){
     console.log('mi-a dat click');
