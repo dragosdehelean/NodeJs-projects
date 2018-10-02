@@ -8,8 +8,27 @@
     <!-- BEGIN Accordion-->
     <div class="accordion" id="recipeList">   
       
-      
+     <% results.forEach( function(recipe){ %> 
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <button class="btn btn-link collapsed" type="button" data-toggle="collapse" 
+              data-target="#r<%= recipe.recipe_id %>" >
+              Titlul retetei
+            </button>
+          </h5>
+        </div>
+        <div id="r<%= recipe.recipe_id %>" class="collapse" data-parent="#recipeList">
+          <div class="card-body">
+            <strong>Ingredients:</strong> ingredientul 1, 2, etc.
+            <hr>
+            <strong>Directions:</strong> Intai facem asa, dupa aia facem altfel, etc.
+          </div>          
+        </div>
+      </div>
+      <!-- END Card-->
 
+      <% }) %>
     </div>
     <!-- END Accordion-->
 

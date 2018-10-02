@@ -119,8 +119,8 @@ app.post('/goodbye', (req, res) => {
  SPA - Recipes
 **************/
 
-app.get('/recipes', queries.all_recipes, (req, res) => {  
-  res.render('pages/recipes', {recipes: req.all_recipes});
+app.get('/recipes', queries.all_recipes, (req, res) => { 
+  res.render('pages/recipes');
 });
 
 app.post('/recipes/create', [

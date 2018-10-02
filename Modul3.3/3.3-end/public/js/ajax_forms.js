@@ -58,16 +58,20 @@ submit.addEventListener("click", (event)=>{
 recipeList.addEventListener("click", (event)=>{
   if (event.target.value === "delete" ){
     console.log('mi-a dat click');
+    if(confirm('Esti sigur ca vrei sa stergi reteta?!?')){
 
-    const id = event.target.dataset.id;
-    const url = '/recipes/delete/' + id;
+      const id = event.target.dataset.id;
+      const url = '/recipes/delete/' + id;
+  
+      fetch(url, { method: 'DELETE' })
+        .then(res => {
+          console.log(res);
+          window.location.href = '/recipes';
+        })
+  
 
-    fetch(url, { method: 'DELETE' })
-      .then(res => {
-        console.log(res);
-        window.location.href = '/recipes';
-      })
-
+    }
+    
 
   } else {   
     console.log('NU mi-a dat click');
