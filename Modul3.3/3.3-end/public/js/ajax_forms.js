@@ -63,8 +63,7 @@ recipeList.addEventListener("click", (event)=>{
       .then(res => {
         console.log(res);
         window.location.href = '/recipes';
-      })
-
+      });
 
   } else {   
     console.log('NU mi-a dat click');
