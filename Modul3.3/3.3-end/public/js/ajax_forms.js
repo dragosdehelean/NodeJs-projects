@@ -1,6 +1,7 @@
 const submit = document.getElementById("submit");
 const recipeList = document.getElementById("recipeList");
 
+
 // Actiunea pentru butonul de "create"
 submit.addEventListener("click", (event)=>{
     //anuleaza efectul default al butonului
@@ -37,6 +38,7 @@ submit.addEventListener("click", (event)=>{
         erori +=  
               `</ul>
             </div>`;
+            
         document.getElementById('errors').innerHTML = erori;
       } 
       // Daca nu exista erori, redirecteaza cu mesaj de succes     

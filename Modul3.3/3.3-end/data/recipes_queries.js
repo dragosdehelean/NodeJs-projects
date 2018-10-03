@@ -21,20 +21,31 @@ module.exports = {
 
   //creeaza o noua inregistrare; intoarce o Promise care se rezolva cu rezultatele
   createRecipe: (title, ingredients, directions) => {
-    return new Promise((resolve) => { 
+    return new Promise((resolve, reject) => { 
       const sql = 'INSERT INTO recipes (title, ingredients, directions) VALUES (?, ?, ?)';
       pool.query( sql, [title, ingredients, directions], (error, results) => {
-        if(error) throw error;
-        return resolve(results);
+        if(error){ 
+          reject(error);
+        } else {
+          resolve(results);
+        }
       }); 
     })
   },
 
   //sterge o inregistrare in functie de id-ul primit 
   deleteRecipe: (id) => {
-    const sql = 'DELETE FROM recipes WHERE recipe_id = ?';
-    return pool.query( sql, [id]); 
-  }
+    return new Promise((resolve, reject) => {
+      const sql = 'DELETE FROM recipes WHERE recipe_id = ?';
+      pool.query( sql, [id], (error, results)=>{
+        if (error){
+          reject(error);
+        } else {
+          resolve(results);
+        }
+      }); 
+    })    
+  },
 
 };
 

@@ -124,6 +124,9 @@ app.get('/recipes', queries.all_recipes, (req, res) => {
   res.render('pages/recipes');
 });
 
+
+
+
 app.post('/recipes/create', [
   check('title', 'Trebuie sa introduci un titlu').isLength({ min: 2 }),
   check('ingredients', 'Trebuie sa introduci ingrediente').isLength({ min: 2 }),
@@ -135,22 +138,15 @@ app.post('/recipes/create', [
   //      - ruleaza query-ul de INSERT
   //      - seteaza un flash message
   //      - trimite un raspuns json de succes
-  if (errors.isEmpty()) { 
-    // queries.createRecipe(req.body.title, req.body.ingredients, req.body.directions)
-    //   .on('end', () => {
-    //     req.session.flashMessage = 'Ai introdus o noua reteta';
-    //     res.json({ 
-    //       succes: true
-    //     });
-    //   });    
+  if (errors.isEmpty()) {  
     queries.createRecipe(req.body.title, req.body.ingredients, req.body.directions)
       .then( results => {
         req.session.flashMessage = 'Ai introdus o noua reteta';
-        console.log(results);
         res.json({ 
           succes: true
         });
-      });
+      })
+      .catch(error => console.log(error));
   }  
   // 2) Daca exista erori => 
   //      - trimite un raspuns json de esec + datele completate + erorile 
@@ -163,10 +159,10 @@ app.post('/recipes/create', [
   }
 });
 
-app.delete('/recipes/delete/:id', (req, res) =>{
+app.delete('/recipes/delete/:id', (req, res) => {
 
   queries.deleteRecipe(req.params.id)
-    .on('end', () => {
+    .then( () => {
       req.session.flashMessage = 'Ai sters cu succes reteta';
       res.sendStatus(200);
     });    
