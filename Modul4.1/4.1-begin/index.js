@@ -112,66 +112,16 @@ app.post('/hello', email_valid, name_valid,
 app.post('/goodbye', (req, res) => {
   res.clearCookie('nume');
   res.redirect('/hello');
-});
+})
 
 
 /*************   
  SPA - Recipes
 **************/
 
-app.get('/recipes', queries.all_recipes, (req, res) => { 
-  res.render('pages/recipes');
+app.get('/recipes', queries.all_recipes, (req, res) => {  
+  res.render('pages/recipes', {recipes: req.all_recipes});
 });
-
-app.post('/recipes/create', [
-  check('title', 'Trebuie sa introduci un titlu').isLength({ min: 2 }),
-  check('ingredients', 'Trebuie sa introduci ingrediente').isLength({ min: 2 }),
-  check('directions', 'Trebuie sa introduci indicatiile de preparare').isLength({ min: 2 })
-], (req, res) => {
-  // pune erorile din req in obiectul errors 
-  const errors = validationResult(req);
-      
-  // 1) Daca nu exista erori => 
-  //      - ruleaza query-ul de INSERT
-  //      - seteaza un flash message
-  //      - trimite un raspuns json de succes
-  if (errors.isEmpty()) { 
-    // queries.createRecipe(req.body.title, req.body.ingredients, req.body.directions)
-    //   .on('end', () => {
-    //     req.session.flashMessage = 'Ai introdus o noua reteta';
-    //     res.json({ 
-    //       succes: true
-    //     });
-    //   });    
-    queries.createRecipe(req.body.title, req.body.ingredients, req.body.directions)
-      .then( results => {
-        req.session.flashMessage = 'Ai introdus o noua reteta';
-        console.log(results);
-        res.json({ 
-          succes: true
-        });
-      });
-  }  
-  // 2) Daca exista erori => 
-  //      - trimite un raspuns json de esec + datele completate + erorile 
-  else {     
-    res.json({
-      succes: false,
-      form_data: req.body,
-      errors: errors.mapped()
-    });
-  }
-});
-
-app.delete('/recipes/delete/:id', (req, res) =>{
-
-  queries.deleteRecipe(req.params.id)
-    .on('end', () => {
-      req.session.flashMessage = 'Ai sters cu succes reteta';
-      res.sendStatus(200);
-    });    
-  
-})
 
 
 /*************/
