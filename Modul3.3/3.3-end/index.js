@@ -112,7 +112,7 @@ app.post('/hello', email_valid, name_valid,
 app.post('/goodbye', (req, res) => {
   res.clearCookie('nume');
   res.redirect('/hello');
-})
+});
 
 
 /*************   
@@ -136,13 +136,21 @@ app.post('/recipes/create', [
   //      - seteaza un flash message
   //      - trimite un raspuns json de succes
   if (errors.isEmpty()) { 
+    // queries.createRecipe(req.body.title, req.body.ingredients, req.body.directions)
+    //   .on('end', () => {
+    //     req.session.flashMessage = 'Ai introdus o noua reteta';
+    //     res.json({ 
+    //       succes: true
+    //     });
+    //   });    
     queries.createRecipe(req.body.title, req.body.ingredients, req.body.directions)
-      .on('end', () => {
+      .then( results => {
         req.session.flashMessage = 'Ai introdus o noua reteta';
+        console.log(results);
         res.json({ 
           succes: true
         });
-      });    
+      });
   }  
   // 2) Daca exista erori => 
   //      - trimite un raspuns json de esec + datele completate + erorile 
