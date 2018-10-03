@@ -10,7 +10,7 @@ const pool  = mysql.createPool({
 });
 
 module.exports = {
-  //middleware care face disponibil pe res rezultatele interogarii tabelului cu articole
+  //middleware care face disponibil pe res.locals rezultatele interogarii tabelului recipes
   all_recipes: (req, res, next) => {
     pool.query('SELECT * FROM recipes ORDER BY created_at DESC', (error, results) => {
       if (error) throw error;

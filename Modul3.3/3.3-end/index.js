@@ -17,7 +17,7 @@ if (port == null || port == "") {
   port = 8000;
 }
 
-const queries = require('./data/db_queries.js');
+const queries = require('./data/recipes_queries.js');
 
 // seteaza template engine-ul aplicatiei
 app.set('view engine', 'ejs');
@@ -63,9 +63,10 @@ CUSTOM MIDDLEWARES
 const email_valid = check('email', 'Formatul email-ului nu este corect').isEmail();
 const name_valid = check('nume', 'Numele este prea scurt').isLength({ min: 3 });
 
-// Custom flash middleware
+// Middleware custom care gestioneaza mesajele flash: 
+// le pune intai pe res.locals si apoi le sterge din req.session
 app.use( (req, res, next) => {
-  // if there's a flash message in the session request, make it available in the response, then delete it
+  // if there's a flash message in the session, make it available in the response, then delete it
   if (req.session.flashMessage){
     res.locals.flashMessage = req.session.flashMessage;
     delete req.session.flashMessage;
@@ -130,7 +131,6 @@ app.post('/recipes/create', [
 ], (req, res) => {
   // pune erorile din req in obiectul errors 
   const errors = validationResult(req);
-      
   // 1) Daca nu exista erori => 
   //      - ruleaza query-ul de INSERT
   //      - seteaza un flash message
