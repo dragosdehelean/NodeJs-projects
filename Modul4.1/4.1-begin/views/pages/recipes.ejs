@@ -5,30 +5,38 @@
 <div class="row ">
   <div class="col-md-9">
 
+    <h1>My Recipes</h1>
+    
     <!-- BEGIN Accordion-->
     <div class="accordion" id="recipeList">   
-      
-     <% results.forEach( function(recipe){ %> 
+    <% recipes.forEach( recipe => { %>
       <div class="card">
-        <div class="card-header">
+
+        <div class="card-header" id="heading<%= recipe.recipe_id %>">
           <h5 class="mb-0">
-            <button class="btn btn-link collapsed" type="button" data-toggle="collapse" 
-              data-target="#r<%= recipe.recipe_id %>" >
-              Titlul retetei
+            <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#recipe<%= recipe.recipe_id %>" >
+              <%= recipe.title %>
             </button>
           </h5>
         </div>
-        <div id="r<%= recipe.recipe_id %>" class="collapse" data-parent="#recipeList">
-          <div class="card-body">
-            <strong>Ingredients:</strong> ingredientul 1, 2, etc.
-            <hr>
-            <strong>Directions:</strong> Intai facem asa, dupa aia facem altfel, etc.
-          </div>          
-        </div>
-      </div>
-      <!-- END Card-->
 
-      <% }) %>
+        <div id="recipe<%= recipe.recipe_id %>" class="collapse" data-parent="#recipeList">
+          <div class="card-body">
+            <strong>Ingredients:</strong> <%= recipe.ingredients %>
+            <hr>
+            <strong>Directions:</strong> <%= recipe.directions %>
+            <hr>  
+            <button class="btn btn-default edit-recipe" value="edit">Edit </button>
+            <button class="btn btn-danger delete-recipe" data-id="<%= recipe.recipe_id %>" value="delete">Delete</button>
+          </div>
+          
+        </div>
+
+      </div>
+
+    <% }) %>
+      
+
     </div>
     <!-- END Accordion-->
 
@@ -36,6 +44,6 @@
   </div>
 </div>
 
-<script src="static/js/ajax_forms.js"></script>
+
 
 <% include ../partials/footer.ejs %>

@@ -36,7 +36,6 @@ app.use(bodyParser.urlencoded({
 
 app.use(bodyParser.json());
 
-
 /**
  * Middleware-ul pentru citirea si parsarea cookie-urilor
  * Efect: pe obiectul req.cookies vor aparea perechile de chei/valori din cookie-urile setate de aplicatia noastra
@@ -112,15 +111,15 @@ app.post('/hello', email_valid, name_valid,
 app.post('/goodbye', (req, res) => {
   res.clearCookie('nume');
   res.redirect('/hello');
-})
+});
 
 
 /*************   
  SPA - Recipes
 **************/
 
-app.get('/recipes', queries.all_recipes, (req, res) => {  
-  res.render('pages/recipes', {recipes: req.all_recipes});
+app.get('/recipes', queries.all_recipes, (req, res) => { 
+  res.render('pages/recipes');
 });
 
 
