@@ -36,7 +36,6 @@ app.use(bodyParser.urlencoded({
 
 app.use(bodyParser.json());
 
-
 /**
  * Middleware-ul pentru citirea si parsarea cookie-urilor
  * Efect: pe obiectul req.cookies vor aparea perechile de chei/valori din cookie-urile setate de aplicatia noastra
@@ -94,7 +93,7 @@ app.post('/hello', email_valid, name_valid,
   (req, res) => {    
     // pune erorile din req in obiectul errors 
     const errors = validationResult(req);
-    
+
     // 1) Daca nu exista erori => redirect cu mesaj flash
     if (errors.isEmpty()) { 
       req.session.flashMessage = 'Excelent, te-ai inscris cu email-ul ' + req.body.email;
@@ -123,9 +122,6 @@ app.post('/goodbye', (req, res) => {
 app.get('/recipes', queries.all_recipes, (req, res) => { 
   res.render('pages/recipes');
 });
-
-
-
 
 app.post('/recipes/create', [
   check('title', 'Trebuie sa introduci un titlu').isLength({ min: 2 }),
