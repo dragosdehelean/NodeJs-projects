@@ -120,12 +120,12 @@ app.post('/goodbye', (req, res) => {
  SPA - Recipes
 **************/
 
-app.get('/recipes', queries.all_recipes, (req, res) => { 
-  res.render('pages/recipes');
+app.get('/recipes', (req, res) => { 
+  queries.all_recipes()
+    .then(recipes =>{
+      res.render('pages/recipes', {recipes});
+    })  
 });
-
-
-
 
 app.post('/recipes/create', [
   check('title', 'Trebuie sa introduci un titlu').isLength({ min: 2 }),
@@ -163,7 +163,7 @@ app.delete('/recipes/delete/:id', (req, res) => {
 
   queries.deleteRecipe(req.params.id)
     .then( () => {
-      req.session.flashMessage = 'Ai sters cu succes reteta';
+      req.session.flashMessage = 'Ai sters cu succes reteta ';
       res.sendStatus(200);
     });    
   
