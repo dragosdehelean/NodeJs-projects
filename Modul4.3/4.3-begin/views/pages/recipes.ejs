@@ -1,0 +1,100 @@
+<% include ../partials/meta.ejs %>
+<title>Recipes</title>
+<% include ../partials/header.ejs %>
+
+<div class="row ">
+  <div class="col-md-9">
+
+    <h1>My Recipes</h1>
+    <% if (typeof flashMessage !== 'undefined') { %>          
+      <div class="alert alert-success mt-3" role="alert">
+        <%= flashMessage %>
+      </div>     
+    <% } %>
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary btn-block my-4" data-toggle="modal" data-target="#exampleModal">
+      Adauga o reteta
+    </button>
+
+    <!-- BEGIN Accordion-->
+    <div class="accordion" id="recipeList">   
+    <% recipes.forEach( recipe => { %>
+      <div class="card">
+
+        <div class="card-header" id="heading<%= recipe.recipe_id %>">
+          <h5 class="mb-0">
+            <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#recipe<%= recipe.recipe_id %>" >
+              <%= recipe.title %>
+            </button>
+          </h5>
+        </div>
+
+        <div id="recipe<%= recipe.recipe_id %>" class="collapse" data-parent="#recipeList">
+          <div class="card-body">
+            <strong>Ingredients:</strong> <%= recipe.ingredients %>
+            <hr>
+            <strong>Directions:</strong> <%= recipe.directions %>
+            <hr>  
+            <button class="btn btn-default edit-recipe" value="edit">Edit </button>
+            <button class="btn btn-danger" value="delete">Delete</button>
+          </div>
+          
+        </div>
+
+      </div>
+
+    <% }) %>
+      
+
+    </div>
+    <!-- END Accordion-->
+
+
+  </div>
+</div>
+
+
+<!-- BEGIN Modal Form-->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Introdu o noua reteta</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div id="errors" class="my-0"></div>
+
+      <form id="ajax_form" name="ajax_form">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="title" class="col-form-label">Nume:</label>
+            <input type="text" class="form-control" id="title" name="title">
+          </div>
+          <div class="form-group">
+            <label for="ingredients" class="col-form-label">Ingrediente:</label>
+            <textarea class="form-control" id="ingredients" name="ingredients"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="directions" class="col-form-label">Directions:</label>
+            <textarea class="form-control" id="directions" name="directions"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Renunta</button>
+          <button type="button" class="btn btn-primary" id="submit">Salveaza</button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>
+<!-- END Modal Form-->
+
+<script src="static/js/ajax_forms.js"></script>
+
+<% include ../partials/footer.ejs %>
