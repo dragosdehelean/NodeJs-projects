@@ -1,24 +1,24 @@
 // documentatie modul mysql: https://github.com/mysqljs/mysql
 
 const mysql = require('mysql');
-
-const db_config = {
-  host     : 'eu-cdbr-west-02.cleardb.net',
-  user     : 'b7410007478951',
-  password : 'aa9fd134',
-  database : 'heroku_6a7dc773b8a1d41',
-};
-
+/* Aici trebuie sa va configurati datele de contact daca folositi o bd remote */
 // const db_config = {
-//   host     : 'localhost',
-//   user     : 'root',
-//   password : '',
-//   database : 'heroku_6a7dc773b8a1d41',
+//   host     : 'us-cdbr-iron-east-01.cleardb.net',
+//   user     : 'b9205be20ad484',
+//   password : '61f98e4d',
+//   database : 'heroku_82dd816e5ec1617',
 // };
+
+/* Daca folositi serverul local */
+const db_config = {
+  host     : 'localhost',
+  user     : 'root',
+  password : '',
+  database : 'stepjs',
+};
 
 const pool = mysql.createPool(db_config);
 
-// ce se intampla cu: pool.end() ???
 
 module.exports = {
   //middleware care face disponibil pe res.locals rezultatele interogarii tabelului recipes

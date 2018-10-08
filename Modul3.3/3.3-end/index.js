@@ -148,7 +148,7 @@ app.post('/recipes/create', [
       .catch(error => console.log(error));
   }  
   // 2) Daca exista erori => 
-  //      - trimite un raspuns json de esec + datele completate + erorile 
+  //    - trimite un raspuns json de esec + datele completate + erorile 
   else {     
     res.json({
       succes: false,
