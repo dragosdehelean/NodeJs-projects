@@ -139,9 +139,9 @@ app.post('/recipes/create', [
   //      - trimite un raspuns json de succes
   if (errors.isEmpty()) {  
     queries.createRecipe(req.body.title, req.body.ingredients, req.body.directions)
-      .then( results => {
+      .then( data => {
         req.session.flashMessage = 'Ai introdus o noua reteta';
-        res.json({ 
+        res.json({ // trimite un raspuns JSON formularului din front-end
           succes: true
         });
       })

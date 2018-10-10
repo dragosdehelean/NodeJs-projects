@@ -139,10 +139,14 @@ app.post('/recipes/create', [
   //      - trimite un raspuns json de succes
   if (errors.isEmpty()) { 
     // TODO - apelarea modelului pentru a crea o inregistrare
-    req.session.flashMessage = 'Ai introdus o noua reteta';
-    res.json({ 
-      succes: true
-    });
+    queries.createRecipe( req.body.title, req.body.ingredients, req.body.directions)
+      .then( data => {
+        req.session.flashMessage = 'Ai introdus o noua reteta';
+        res.json({ 
+          succes: true
+        });
+      })
+    
   }  
   // 2) Daca exista erori => 
   //    - trimite un raspuns json de esec + datele completate + erorile 

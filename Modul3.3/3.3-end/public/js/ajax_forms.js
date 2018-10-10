@@ -1,11 +1,10 @@
 const submit = document.getElementById("submit");
 const recipeList = document.getElementById("recipeList");
 
-
 // Actiunea pentru butonul de "create"
 submit.addEventListener("click", (event)=>{
-    //anuleaza efectul default al butonului
-    event.preventDefault();
+   
+    event.preventDefault(); //anuleaza efectul default al butonului
     
     // trimitele datele din formular prin POST, in format JSON
     fetch('/recipes/create', {
@@ -20,8 +19,7 @@ submit.addEventListener("click", (event)=>{
     // parseaza raspunsul JSON primit
     .then(response => response.json())
     // foloseste datele parsate
-    .then(data => {
-     
+    .then(data => {     
       // Daca exista erori, le pune intr-un template literal 
       // la final le afiseaza intr-un div gol din formular
       if (!data.succes) {
@@ -54,6 +52,10 @@ submit.addEventListener("click", (event)=>{
     });
 
 })
+
+
+
+
 
 // Actiunea pentru butonul de "delete" 
 // este ascultat elementul parinte, care contine toata lista

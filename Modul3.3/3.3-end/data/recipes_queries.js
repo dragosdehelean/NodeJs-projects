@@ -1,6 +1,7 @@
 // documentatie modul mysql: https://github.com/mysqljs/mysql
 
 const mysql = require('mysql');
+
 /* Aici trebuie sa va configurati datele de contact daca folositi o bd remote */
 // const db_config = {
 //   host     : 'us-cdbr-iron-east-01.cleardb.net',
@@ -19,9 +20,11 @@ const db_config = {
 
 const pool = mysql.createPool(db_config);
 
-
 module.exports = {
-  //middleware care face disponibil pe res.locals rezultatele interogarii tabelului recipes
+  /**
+   * Obtine toate inregistrarile din recipes; 
+   * @returns o Promise care se rezolva cu rezultatele
+   */
   all_recipes: () => {
     return new Promise((resolve, reject)=>{
       pool.query('SELECT * FROM recipes ORDER BY created_at DESC', (err, results) => {
@@ -29,9 +32,12 @@ module.exports = {
         resolve(results);
       });
     });
-  }, 
-
-  //creeaza o noua inregistrare; intoarce o Promise care se rezolva cu rezultatele
+  },  
+  
+  /** 
+   * Creeaza o noua inregistrare
+   * @returns o Promise  
+   */
   createRecipe: (title, ingredients, directions) => {
     return new Promise((resolve, reject) => { 
       const sql = 'INSERT INTO recipes (title, ingredients, directions) VALUES (?, ?, ?)';
