@@ -36,14 +36,7 @@
             <hr>
             <strong>Directions:</strong> <%= recipe.directions %>
             <hr>  
-            <button class="btn btn-default" value="edit" 
-                  data-toggle="modal" 
-                  data-target="#editModal"
-                  data-id = ""
-                  data-title = ""
-                  data-ingredients = ""
-                  data-directions = ""
-                  >Edit</button>
+            <button class="btn btn-default" value="edit">Edit</button>
             <button class="btn btn-danger" data-id="<%= recipe.recipe_id %>" value="delete">Delete</button>
           </div>
           
@@ -100,46 +93,7 @@
 </div>
 <!-- END Modal Form-->
 
-<!-- BEGIN EDIT Modal Form-->
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Editeaza reteta</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
 
-      <div id="errors" class="my-0"></div>
-
-      <form id="edit-form" method="POST" name="edit-form">
-        <input type="hidden" name="id" id="edit-form-id">
-        <div class="modal-body">
-          <div class="form-group">
-            <label for="edit-form-title" class="col-form-label">Nume:</label>
-            <input type="text" class="form-control" id="edit-form-title" name="title">
-          </div>
-          <div class="form-group">
-            <label for="edit-form-ingredients" class="col-form-label">Ingrediente:</label>
-            <textarea class="form-control" id="edit-form-ingredients" name="ingredients"></textarea>
-          </div>
-          <div class="form-group">
-            <label for="edit-form-directions" class="col-form-label">Directions:</label>
-            <textarea class="form-control" id="edit-form-directions" name="directions"></textarea>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Renunta</button>
-          <button type="button" class="btn btn-primary" id="edit-form-submit">Salveaza</button>
-        </div>
-
-      </form>
-
-    </div>
-  </div>
-</div>
-<!-- END Modal Form-->
 
 <script src="static/js/ajax_forms.js"></script>
 
