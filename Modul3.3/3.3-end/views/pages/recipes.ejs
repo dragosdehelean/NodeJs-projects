@@ -39,10 +39,10 @@
             <button class="btn btn-default" value="edit" 
                   data-toggle="modal" 
                   data-target="#editModal"
-                  data-id = ""
-                  data-title = ""
-                  data-ingredients = ""
-                  data-directions = ""
+                  data-id = "<%= recipe.recipe_id %>"
+                  data-title = "<%= recipe.title %>"
+                  data-ingredients = "<%= recipe.ingredients %>"
+                  data-directions = "<%= recipe.directions %>"
                   >Edit</button>
             <button class="btn btn-danger" data-id="<%= recipe.recipe_id %>" value="delete">Delete</button>
           </div>
@@ -114,7 +114,9 @@
       <div id="errors" class="my-0"></div>
 
       <form id="edit-form" method="POST" name="edit-form">
+
         <input type="hidden" name="id" id="edit-form-id">
+        
         <div class="modal-body">
           <div class="form-group">
             <label for="edit-form-title" class="col-form-label">Nume:</label>

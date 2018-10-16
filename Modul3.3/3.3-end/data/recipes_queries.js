@@ -58,18 +58,22 @@ module.exports = {
     });
   },
 
-
-
-  // //sterge o inregistrare in functie de id-ul primit; intoarce o Promise 
-  // deleteRecipe: (id) => {
-  //   return new Promise((resolve, reject) => {
-  //     const sql = 'DELETE FROM recipes WHERE recipe_id = ?';
-  //     pool.query( sql, [id], (error, results)=>{
-  //       if (error) return reject(error);
-  //       resolve(results);        
-  //     }); 
-  //   })    
-  // }, 
+  updateRecipe: (id, title, ingredients, directions) => {
+    return new Promise((resolve, reject) => {
+      const sql = `
+        UPDATE recipes
+        SET title = ?,
+        directions = ?, 
+        ingredients = ?
+        WHERE recipe_id = ? 
+      `;
+      pool.query(sql, [title, directions, ingredients, id], (err, result)=>{
+        if(err) return reject(err);
+        resolve(result);
+      });
+      
+    });
+  }
 
 }
 

@@ -164,6 +164,15 @@ app.delete('/recipes/delete/:id', (req, res) => {
       res.sendStatus(200);
     });    
   
+});
+
+app.put('/recipes/update', async (req, res) => {
+  const b = req.body;
+  const result = await queries.updateRecipe(b.id, b.title, b.ingredients, b.directions);
+  if(result){
+    req.session.flashMessage = 'Ai updatat cu succes reteta ';
+    res.sendStatus(200);
+  }  
 })
 
 

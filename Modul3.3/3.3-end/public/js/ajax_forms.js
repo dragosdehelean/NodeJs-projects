@@ -1,5 +1,6 @@
 const submit = document.getElementById("submit");
 const recipeList = document.getElementById("recipeList");
+const update = document.getElementById("edit-form-submit");
 
 // Actiunea pentru butonul de "create"
 submit.addEventListener("click", (event)=>{
@@ -56,7 +57,6 @@ submit.addEventListener("click", (event)=>{
 // este ascultat elementul parinte, care contine toata lista
 recipeList.addEventListener("click", (event)=>{
   if (event.target.value === "delete" ){
-    console.log('mi-a dat click');
     if(confirm('Esti sigur ca vrei sa stergi reteta?!?')){
 
       const id = event.target.dataset.id;
@@ -69,7 +69,43 @@ recipeList.addEventListener("click", (event)=>{
         })
     }    
 
-  } else {   
-    console.log('NU mi-a dat click');
-  }  
+  } 
+});
+
+// Actiunea pentru butonul de "Edit" 
+// este ascultat elementul parinte, care contine toata lista
+recipeList.addEventListener("click", (event)=>{
+  if (event.target.value === "edit" ){
+
+    console.log('mi-a dat click');
+
+    document.getElementById('edit-form-id').value = event.target.dataset.id;
+    document.getElementById('edit-form-title').value = event.target.dataset.title;
+    document.getElementById('edit-form-ingredients').value = event.target.dataset.ingredients;
+    document.getElementById('edit-form-directions').value = event.target.dataset.directions;
+  } 
+});
+
+
+//actiunea de save la formularul de "Edit"
+
+update.addEventListener("click", (event)=>{
+
+  fetch('/recipes/update', {
+    method: 'PUT', 
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      id: document.getElementById('edit-form-id').value,  
+      title: document.getElementById('edit-form-title').value,
+      ingredients: document.getElementById('edit-form-ingredients').value,
+      directions: document.getElementById('edit-form-directions').value        
+    })
+  })
+    .then( res => {
+      console.log(res.status);
+      if(res.status === 200){
+        window.location.href = '/recipes';
+      }     
+    })
+
 })
