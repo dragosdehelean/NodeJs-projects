@@ -53,10 +53,11 @@ submit.addEventListener("click", (event)=>{
     });
 })
 
-// Actiunea pentru butonul de "delete" 
+// Actiunea pentru butonul de "Delete" 
 // este ascultat elementul parinte, care contine toata lista
 recipeList.addEventListener("click", (event)=>{
   if (event.target.value === "delete" ){
+
     if(confirm('Esti sigur ca vrei sa stergi reteta?!?')){
 
       const id = event.target.dataset.id;
@@ -72,8 +73,10 @@ recipeList.addEventListener("click", (event)=>{
   } 
 });
 
-// Actiunea pentru butonul de "Edit" 
-// este ascultat elementul parinte, care contine toata lista
+/**
+ * Actiunea pentru butonul de "Edit" 
+ * este ascultat elementul parinte, care contine toata lista
+ */ 
 recipeList.addEventListener("click", (event)=>{
   if (event.target.value === "edit" ){
 
@@ -87,7 +90,7 @@ recipeList.addEventListener("click", (event)=>{
 });
 
 
-//actiunea de save la formularul de "Edit"
+//actiunea de Save la formularul de "Edit"
 
 update.addEventListener("click", (event)=>{
 

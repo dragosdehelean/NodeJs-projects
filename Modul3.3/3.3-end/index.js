@@ -168,11 +168,15 @@ app.delete('/recipes/delete/:id', (req, res) => {
 
 app.put('/recipes/update', async (req, res) => {
   const b = req.body;
-  const result = await queries.updateRecipe(b.id, b.title, b.ingredients, b.directions);
-  if(result){
+  try{
+    await queries.updateRecipe(b.id, b.title, b.ingredients, b.directions); 
     req.session.flashMessage = 'Ai updatat cu succes reteta ';
     res.sendStatus(200);
-  }  
+  } 
+  catch(err){
+    console.log(err)
+  }
+   
 })
 
 
