@@ -7,6 +7,7 @@ const bodyParser = require('body-parser'); // citeste datele trimise prin POST
 const cookieParser = require('cookie-parser'); // citeste datele din cookies
 const expressSession = require('express-session'); // managementul sesiunilor
 const { check, validationResult } = require('express-validator/check'); // validare
+const recipes = require('./routes/recipes');
 
 // initializeaza o aplicatie Express
 const app = express();
@@ -17,7 +18,7 @@ if (port == null || port == "") {
   port = 8000;
 }
 
-const queries = require('./data/recipes_queries.js');
+// const queries = require('./data/recipes_queries.js');
 
 // seteaza template engine-ul aplicatiei
 app.set('view engine', 'ejs');
@@ -62,8 +63,10 @@ CUSTOM MIDDLEWARES
 const email_valid = check('email', 'Formatul email-ului nu este corect').isEmail();
 const name_valid = check('nume', 'Numele este prea scurt').isLength({ min: 3 });
 
-// Middleware custom care gestioneaza mesajele flash: 
-// le pune intai pe res.locals si apoi le sterge din req.session
+/**
+ * Middleware custom care gestioneaza mesajele flash: 
+ * le pune intai pe res.locals si apoi le sterge din req.session
+ */ 
 app.use( (req, res, next) => {
   // if there's a flash message in the session, make it available in the response, then delete it
   if (req.session.flashMessage){
@@ -72,6 +75,11 @@ app.use( (req, res, next) => {
   }  
   next();
 });
+
+/**
+ * Incarca rutele pentru /recipes
+ */
+app.use('/recipes', recipes);
 
 /*********   
  RUTE
@@ -119,66 +127,64 @@ app.post('/goodbye', (req, res) => {
  SPA - Recipes
 **************/
 
-app.get('/recipes', async (req, res) => { 
-  const recipes = await queries.all_recipes();
-  res.render('pages/recipes', {recipes});
-});
+// app.get('/recipes', async (req, res) => { 
+//   const recipes = await queries.all_recipes();
+//   res.render('pages/recipes', {recipes});
+// });
 
-app.post('/recipes/create', [
-  check('title', 'Trebuie sa introduci un titlu').isLength({ min: 2 }),
-  check('ingredients', 'Trebuie sa introduci ingrediente').isLength({ min: 2 }),
-  check('directions', 'Trebuie sa introduci indicatiile de preparare').isLength({ min: 2 })
-], (req, res) => {
-  // pune erorile din req in obiectul errors 
-  const errors = validationResult(req);
-  // 1) Daca nu exista erori => 
-  //      - ruleaza query-ul de INSERT
-  //      - seteaza un flash message
-  //      - trimite un raspuns json de succes
-  if (errors.isEmpty()) {  
-    queries.createRecipe(req.body.title, req.body.ingredients, req.body.directions)
-      .then( data => {
-        req.session.flashMessage = 'Ai introdus o noua reteta';
-        res.json({ // trimite un raspuns JSON formularului din front-end
-          succes: true
-        });
-      })
-      .catch(error => console.log(error));
-  }  
-  // 2) Daca exista erori => 
-  //    - trimite un raspuns json de esec + datele completate + erorile 
-  else {     
-    res.json({
-      succes: false,
-      form_data: req.body,
-      errors: errors.mapped()
-    });
-  }
-});
+// app.post('/recipes/create', [
+//   check('title', 'Trebuie sa introduci un titlu').isLength({ min: 2 }),
+//   check('ingredients', 'Trebuie sa introduci ingrediente').isLength({ min: 2 }),
+//   check('directions', 'Trebuie sa introduci indicatiile de preparare').isLength({ min: 2 })
+// ], (req, res) => {
+//   // pune erorile din req in obiectul errors 
+//   const errors = validationResult(req);
+//   // 1) Daca nu exista erori => 
+//   //      - ruleaza query-ul de INSERT
+//   //      - seteaza un flash message
+//   //      - trimite un raspuns json de succes
+//   if (errors.isEmpty()) {  
+//     queries.createRecipe(req.body.title, req.body.ingredients, req.body.directions)
+//       .then( data => {
+//         req.session.flashMessage = 'Ai introdus o noua reteta';
+//         res.json({ // trimite un raspuns JSON formularului din front-end
+//           succes: true
+//         });
+//       })
+//       .catch(error => console.log(error));
+//   }  
+//   // 2) Daca exista erori => 
+//   //    - trimite un raspuns json de esec + datele completate + erorile 
+//   else {     
+//     res.json({
+//       succes: false,
+//       form_data: req.body,
+//       errors: errors.mapped()
+//     });
+//   }
+// });
 
-app.delete('/recipes/delete/:id', (req, res) => {
+// app.delete('/recipes/delete/:id', (req, res) => {
 
-  queries.deleteRecipe(req.params.id)
-    .then( () => {
-      req.session.flashMessage = 'Ai sters cu succes reteta ';
-      res.sendStatus(200);
-    });    
+//   queries.deleteRecipe(req.params.id)
+//     .then( () => {
+//       req.session.flashMessage = 'Ai sters cu succes reteta ';
+//       res.sendStatus(200);
+//     });    
   
-});
+// });
 
-app.put('/recipes/update', async (req, res) => {
-  const b = req.body;
-  try{
-    await queries.updateRecipe(b.id, b.title, b.ingredients, b.directions); 
-    req.session.flashMessage = 'Ai updatat cu succes reteta ';
-    res.sendStatus(200);
-  } 
-  catch(err){
-    console.log(err)
-  }
-   
-})
-
+// app.put('/recipes/update', async (req, res) => {
+//   const b = req.body;
+//   try{
+//     await queries.updateRecipe(b.id, b.title, b.ingredients, b.directions); 
+//     req.session.flashMessage = 'Ai updatat cu succes reteta ';
+//     res.sendStatus(200);
+//   } 
+//   catch(err){
+//     console.log(err)
+//   }   
+// })
 
 /*************/
 
