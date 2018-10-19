@@ -31,6 +31,10 @@
         <label for="email">Email</label>
         <input type="text" name="email" id="email" class="form-control <%= errors.email ? 'is-invalid' : ''%>" value="<%= data.email %>">
       </div>
+      <div class="form-group">
+        <label for="foto">Fotografie</label>
+        <input type="file" name="foto" id="foto" >
+      </div>
 
       <button type="submit" class="btn">Submit</button>
     </form>

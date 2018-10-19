@@ -3,14 +3,14 @@ INITIALIZARI
 ************/
 
 const express = require('express');
-const bodyParser = require('body-parser'); // citeste datele trimise prin POST
+const app = express(); // initializeaza o aplicatie Express
 const cookieParser = require('cookie-parser'); // citeste datele din cookies
 const expressSession = require('express-session'); // managementul sesiunilor
 const { check, validationResult } = require('express-validator/check'); // validare
-const recipes = require('./routes/recipes');
 
-// initializeaza o aplicatie Express
-const app = express();
+const multer = require('multer');
+
+const recipes = require('./routes/recipes');
 
 // portul default (pentru compatibilitate cu Heroku) 
 let port = process.env.PORT;
@@ -31,11 +31,9 @@ STANDARD MIDDLEWARES
  * Middleware-ul pentru parsarea requesturilor transmise prin formulare POST
  * Efect: pe obiectul req.body vor aparea perechile de chei/valori transmise prin formular
  */
-app.use(bodyParser.urlencoded({
-  extended: false
-}));
+app.use(express.urlencoded());
 
-app.use(bodyParser.json());
+app.use(express.json());
 
 /**
  * Middleware-ul pentru citirea si parsarea cookie-urilor
@@ -55,6 +53,20 @@ app.use(expressSession({
 
 // seteaza directorul "/public" pentru a afisa asset-uri statice
 app.use('/static', express.static('public'));
+
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//       cb(null, 'public/uploads');
+//   },
+
+//   filename: (req, file, cb) => {
+//       cb(null, file.originalname)
+//   }
+// });
+
+// const upload = multer({ storage: storage});
+
+const upload = multer({ dest: 'public/uploads/' });
 
 /*******************   
 CUSTOM MIDDLEWARES
@@ -97,8 +109,10 @@ app.get('/hello', (req, res) => {
   });
 });
 
-app.post('/hello', email_valid, name_valid,  
-  (req, res) => {    
+app.post('/hello', upload.single('foto'), email_valid, name_valid,  
+  (req, res) => {  
+    console.log(req.file);
+    
     // pune erorile din req in obiectul errors 
     const errors = validationResult(req);
 
@@ -123,68 +137,7 @@ app.post('/goodbye', (req, res) => {
 });
 
 
-/*************   
- SPA - Recipes
-**************/
 
-// app.get('/recipes', async (req, res) => { 
-//   const recipes = await queries.all_recipes();
-//   res.render('pages/recipes', {recipes});
-// });
-
-// app.post('/recipes/create', [
-//   check('title', 'Trebuie sa introduci un titlu').isLength({ min: 2 }),
-//   check('ingredients', 'Trebuie sa introduci ingrediente').isLength({ min: 2 }),
-//   check('directions', 'Trebuie sa introduci indicatiile de preparare').isLength({ min: 2 })
-// ], (req, res) => {
-//   // pune erorile din req in obiectul errors 
-//   const errors = validationResult(req);
-//   // 1) Daca nu exista erori => 
-//   //      - ruleaza query-ul de INSERT
-//   //      - seteaza un flash message
-//   //      - trimite un raspuns json de succes
-//   if (errors.isEmpty()) {  
-//     queries.createRecipe(req.body.title, req.body.ingredients, req.body.directions)
-//       .then( data => {
-//         req.session.flashMessage = 'Ai introdus o noua reteta';
-//         res.json({ // trimite un raspuns JSON formularului din front-end
-//           succes: true
-//         });
-//       })
-//       .catch(error => console.log(error));
-//   }  
-//   // 2) Daca exista erori => 
-//   //    - trimite un raspuns json de esec + datele completate + erorile 
-//   else {     
-//     res.json({
-//       succes: false,
-//       form_data: req.body,
-//       errors: errors.mapped()
-//     });
-//   }
-// });
-
-// app.delete('/recipes/delete/:id', (req, res) => {
-
-//   queries.deleteRecipe(req.params.id)
-//     .then( () => {
-//       req.session.flashMessage = 'Ai sters cu succes reteta ';
-//       res.sendStatus(200);
-//     });    
-  
-// });
-
-// app.put('/recipes/update', async (req, res) => {
-//   const b = req.body;
-//   try{
-//     await queries.updateRecipe(b.id, b.title, b.ingredients, b.directions); 
-//     req.session.flashMessage = 'Ai updatat cu succes reteta ';
-//     res.sendStatus(200);
-//   } 
-//   catch(err){
-//     console.log(err)
-//   }   
-// })
 
 /*************/
 

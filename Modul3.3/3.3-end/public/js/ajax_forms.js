@@ -2,7 +2,7 @@ const submit = document.getElementById("submit");
 const recipeList = document.getElementById("recipeList");
 const update = document.getElementById("edit-form-submit");
 
-// Actiunea pentru butonul de "create"
+// actiunea de Save la formularul de "Edit"
 submit.addEventListener("click", (event)=>{
    
     event.preventDefault(); //anuleaza efectul default al butonului
@@ -40,7 +40,7 @@ submit.addEventListener("click", (event)=>{
             
         document.getElementById('errors').innerHTML = erori;
       } 
-      // Daca nu exista erori, redirecteaza cu mesaj de succes     
+      // Daca nu exista erori, redirecteaza     
       else {
         window.location.href = '/recipes';
         console.log('succes');
