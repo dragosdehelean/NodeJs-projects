@@ -22,7 +22,7 @@
       }
     %>
 
-    <form action="/hello" method="POST">
+    <form action="/hello" method="POST" enctype="multipart/form-data">
       <div class="form-group">
         <label for="nume">Nume</label>
         <input type="text" name="nume" id="nume" class="form-control <%= errors.nume ? 'is-invalid' : ''%>" value="<%= data.nume %>">

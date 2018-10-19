@@ -7,6 +7,7 @@ const app = express(); // initializeaza o aplicatie Express
 const cookieParser = require('cookie-parser'); // citeste datele din cookies
 const expressSession = require('express-session'); // managementul sesiunilor
 const { check, validationResult } = require('express-validator/check'); // validare
+const fs = require('fs');
 
 const multer = require('multer');
 
@@ -28,10 +29,10 @@ STANDARD MIDDLEWARES
 ********************/
 
 /**
- * Middleware-ul pentru parsarea requesturilor transmise prin formulare POST
+ * Middleware core pentru parsarea requesturilor transmise prin formulare POST
  * Efect: pe obiectul req.body vor aparea perechile de chei/valori transmise prin formular
  */
-app.use(express.urlencoded());
+app.use(express.urlencoded({extended: true}));
 
 app.use(express.json());
 
@@ -66,7 +67,10 @@ app.use('/static', express.static('public'));
 
 // const upload = multer({ storage: storage});
 
-const upload = multer({ dest: 'public/uploads/' });
+// const upload = multer({ dest: 'public/uploads/' });
+
+var storage = multer.memoryStorage();
+var upload = multer({ storage: storage, limits: {fileSize: 25000} })
 
 /*******************   
 CUSTOM MIDDLEWARES
@@ -88,14 +92,14 @@ app.use( (req, res, next) => {
   next();
 });
 
-/**
- * Incarca rutele pentru /recipes
- */
-app.use('/recipes', recipes);
 
 /*********   
  RUTE
 **********/
+
+// Incarca rutele pentru "/recipes..."
+app.use('/recipes', recipes);
+
 
 app.get('/', (req, res) => {
   res.locals.nume = req.cookies.nume;
@@ -113,6 +117,11 @@ app.post('/hello', upload.single('foto'), email_valid, name_valid,
   (req, res) => {  
     console.log(req.file);
     
+    fs.writeFile('./public/test.jpg', req.file.buffer, (err)=>{
+      if (err) throw err;
+      console.log('The file has been saved!');
+    })
+
     // pune erorile din req in obiectul errors 
     const errors = validationResult(req);
 
