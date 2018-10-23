@@ -113,12 +113,14 @@ app.get('/hello', (req, res) => {
 
 app.post('/hello', upload.single('foto'), email_valid, name_valid,  
   (req, res) => {  
-    console.log(req.file);
+    // console.log(req.file);
+
+    console.log(req.headers['content-type']);
     
-    fs.writeFile('./public/test.jpg', req.file.buffer, (err)=>{
-      if (err) throw err;
-      console.log('The file has been saved!');
-    })
+    // fs.writeFile('./public/test.jpg', req.file.buffer, (err)=>{
+    //   if (err) throw err;
+    //   console.log('The file has been saved!');
+    // })
 
     // pune erorile din req in obiectul errors 
     const errors = validationResult(req);

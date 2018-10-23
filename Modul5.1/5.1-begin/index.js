@@ -7,9 +7,7 @@ const app = express(); // initializeaza o aplicatie Express
 const cookieParser = require('cookie-parser'); // citeste datele din cookies
 const expressSession = require('express-session'); // managementul sesiunilor
 const { check, validationResult } = require('express-validator/check'); // validare
-const fs = require('fs');
 
-const multer = require('multer');
 
 const recipes = require('./routes/recipes');
 
@@ -19,7 +17,6 @@ if (port == null || port == "") {
   port = 8000;
 }
 
-// const queries = require('./data/recipes_queries.js');
 
 // seteaza template engine-ul aplicatiei
 app.set('view engine', 'ejs');
@@ -54,23 +51,6 @@ app.use(expressSession({
 
 // seteaza directorul "/public" pentru a afisa asset-uri statice
 app.use('/static', express.static('public'));
-
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//       cb(null, 'public/uploads');
-//   },
-
-//   filename: (req, file, cb) => {
-//       cb(null, file.originalname)
-//   }
-// });
-
-// const upload = multer({ storage: storage});
-
-// const upload = multer({ dest: 'public/uploads/' });
-
-var storage = multer.memoryStorage();
-var upload = multer({ storage: storage, limits: {fileSize: 25000} })
 
 /*******************   
 CUSTOM MIDDLEWARES
@@ -113,15 +93,7 @@ app.get('/hello', (req, res) => {
   });
 });
 
-app.post('/hello', upload.single('foto'), email_valid, name_valid,  
-  (req, res) => {  
-    console.log(req.file);
-    
-    fs.writeFile('./public/test.jpg', req.file.buffer, (err)=>{
-      if (err) throw err;
-      console.log('The file has been saved!');
-    })
-
+app.post('/hello', email_valid, name_valid, (req, res) => {
     // pune erorile din req in obiectul errors 
     const errors = validationResult(req);
 
