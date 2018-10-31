@@ -66,28 +66,31 @@ app.use('/static', express.static('public'));
  * Multer configuration
  */
 
-// Varianta 1
+// Configurare Multer - Varianta 1
 // const upload = multer({ dest: 'public/uploads/' });
 
 
-// Varianta 2
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-      cb(null, 'public/uploads');
-  },
-
-  filename: (req, file, cb) => {
-      cb(null, file.originalname)
+// Configurare Multer - Varianta 2 
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//       cb(null, 'public/uploads');
+//   },
+//   filename: (req, file, cb) => {
+//       cb(null, Date.now() + file.originalname)
+//   }
+// });
+function fileFilter(req, file, cb){
+  if (!file.originalname.match(/\.(jpeg|jpg|png|gif)$/)){
+    cb(new Error('Nu poti uploada decat fisiere de imagine'), false);
+  } else {
+    cb(null, true);
   }
-});
-
-const upload = multer({ storage: storage});
+}
 
 
 // Varianta 3
-
-// var storage = multer.memoryStorage();
-// var upload = multer({ storage: storage, limits: {fileSize: 25000} })
+var storage = multer.memoryStorage();
+const upload = multer({ storage: storage, fileFilter: fileFilter, limits: {fileSize: 30000} });
 
 /*******************   
 CUSTOM MIDDLEWARES
@@ -120,6 +123,7 @@ app.use('/recipes', recipes);
 
 app.get('/', (req, res) => {
   res.locals.nume = req.cookies.nume;
+  res.locals.image = req.cookies.nume;
   res.render('pages/index');   
 });
 
@@ -132,22 +136,22 @@ app.get('/hello', (req, res) => {
 
 app.post('/hello', upload.single('foto'), email_valid, name_valid, (req, res) => {  
   console.log(req.file);
-  console.dir(req.body);
-
-  
-  // fs.writeFile('./public/test.jpg', req.file.buffer, (err)=>{
-  //   if (err) throw err;
-  //   console.log('The file has been saved!');
-  // })
+  console.dir(req.body);  
 
   // pune erorile din req in obiectul errors 
   const errors = validationResult(req);
 
   // 1) Daca nu exista erori => redirect cu mesaj flash
   if (errors.isEmpty()) { 
+
     req.session.flashMessage = 'Excelent, te-ai inscris cu email-ul ' + req.body.email;
-    res.cookie('nume', req.body.nume)
+    res.cookie('nume', req.body.nume);
     res.redirect('/');
+
+    fs.writeFile('./public/uploads/' + req.file.originalname, req.file.buffer, (err)=>{
+      if (err) throw err;
+      console.log('The file has been saved!');
+    });
   }  
     // 2) Daca exista erori => afiseaza din nou formularul cu mesaje de eroare si datele completate
     else { 
