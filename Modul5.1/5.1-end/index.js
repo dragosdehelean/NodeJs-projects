@@ -79,6 +79,8 @@ app.use('/static', express.static('public'));
 //       cb(null, Date.now() + file.originalname)
 //   }
 // });
+
+// Configurare Multer - Varianta 3 
 function fileFilter(req, file, cb){
   if (!file.originalname.match(/\.(jpeg|jpg|png|gif)$/)){
     cb(new Error('Nu poti uploada decat fisiere de imagine'), false);
@@ -86,11 +88,9 @@ function fileFilter(req, file, cb){
     cb(null, true);
   }
 }
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage, fileFilter: fileFilter, limits: {fileSize: 50000} });
 
-
-// Varianta 3
-var storage = multer.memoryStorage();
-const upload = multer({ storage: storage, fileFilter: fileFilter, limits: {fileSize: 30000} });
 
 /*******************   
 CUSTOM MIDDLEWARES
@@ -123,7 +123,7 @@ app.use('/recipes', recipes);
 
 app.get('/', (req, res) => {
   res.locals.nume = req.cookies.nume;
-  res.locals.image = req.cookies.nume;
+  res.locals.img = req.cookies.img;
   res.render('pages/index');   
 });
 
@@ -135,23 +135,25 @@ app.get('/hello', (req, res) => {
 });
 
 app.post('/hello', upload.single('foto'), email_valid, name_valid, (req, res) => {  
-  console.log(req.file);
-  console.dir(req.body);  
+  console.log(req.file.buffer);  
 
   // pune erorile din req in obiectul errors 
   const errors = validationResult(req);
 
   // 1) Daca nu exista erori => redirect cu mesaj flash
   if (errors.isEmpty()) { 
-
     req.session.flashMessage = 'Excelent, te-ai inscris cu email-ul ' + req.body.email;
     res.cookie('nume', req.body.nume);
-    res.redirect('/');
-
+    res.cookie('img', req.file.originalname);    
+    // scrie fisierul pe hard
     fs.writeFile('./public/uploads/' + req.file.originalname, req.file.buffer, (err)=>{
       if (err) throw err;
       console.log('The file has been saved!');
+      // redirecteaza catre home, daca totul a mers ok
+      res.redirect('/');
+      
     });
+    
   }  
     // 2) Daca exista erori => afiseaza din nou formularul cu mesaje de eroare si datele completate
     else { 
@@ -163,8 +165,14 @@ app.post('/hello', upload.single('foto'), email_valid, name_valid, (req, res) =>
 });
 
 app.post('/goodbye', (req, res) => {
-  res.clearCookie('nume');
-  res.redirect('/hello');
+  fs.unlink('public/uploads/' + req.cookies.img, (err) => {
+    if (err) throw err;
+    
+    console.log('public/uploads/' + req.cookies.img + ' was deleted');
+    res.clearCookie('nume');
+    res.clearCookie('img');
+    res.redirect('/hello');
+  });  
 });
 
 

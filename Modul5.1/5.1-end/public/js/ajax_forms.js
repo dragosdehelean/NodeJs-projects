@@ -1,21 +1,34 @@
 const submit = document.getElementById("submit");
 const recipeList = document.getElementById("recipeList");
 const update = document.getElementById("edit-form-submit");
+const foto = document.getElementById("foto");
 
 // actiunea de Save la formularul de "Edit"
 submit.addEventListener("click", (event)=>{
    
-    event.preventDefault(); //anuleaza efectul default al butonului
+    event.preventDefault(); //anuleaza efectul default al butonului    
+
+    const formData = new FormData();
     
+    formData.append('title', document.getElementById('title').value);
+    formData.append('ingredients', document.getElementById('ingredients').value);
+    formData.append('directions', document.getElementById('directions').value);
+    formData.append('foto', foto.files[0]);
+
     // trimitele datele din formular prin POST, in format JSON
+    // fetch('/recipes/create', {
+    //     method: 'POST',
+    //     headers: {'Content-Type': 'application/json'},
+    //     body: JSON.stringify({
+    //         title: document.getElementById('title').value,
+    //         ingredients: document.getElementById('ingredients').value,
+    //         directions: document.getElementById('directions').value
+    //     })
+    // })
+
     fetch('/recipes/create', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-            title: document.getElementById('title').value,
-            ingredients: document.getElementById('ingredients').value,
-            directions: document.getElementById('directions').value
-        })
+      method: 'POST',
+      body: formData
     })
     // parseaza raspunsul JSON primit
     .then(response => response.json())

@@ -1,12 +1,26 @@
 const express = require('express');
 const { check, validationResult } = require('express-validator/check'); // validare
 const queries = require('../data/recipes_queries.js');
+const multer = require('multer');
 
 // initializeaza o aplicatie Express
 const router = express.Router();
 
 // middleware core al express care parseaza request-urile primite in format JSON
 router.use(express.json());
+
+/**
+ * Configurare Multer - Varianta 3 
+ */ 
+function fileFilter(req, file, cb){
+  if (!file.originalname.match(/\.(jpeg|jpg|png|gif)$/)){
+    cb(new Error('Nu poti uploada decat fisiere de imagine'), false);
+  } else {
+    cb(null, true);
+  }
+}
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage, fileFilter: fileFilter, limits: {fileSize: 50000} });
 
 /**
  * Ruta pentru indexul retelor
@@ -19,11 +33,16 @@ router.get('/', async (req, res) => {
 /**
  * Ruta pentru adaugarea unei retete noi 
  */
-router.post('/create', [
+router.post('/create', upload.single('foto'), [
     check('title', 'Trebuie sa introduci un titlu').isLength({ min: 2 }),
     check('ingredients', 'Trebuie sa introduci ingrediente').isLength({ min: 2 }),
     check('directions', 'Trebuie sa introduci indicatiile de preparare').isLength({ min: 2 })
     ], (req, res) => {
+
+    console.log(req.file.buffer);
+    console.log(req.headers['content-type']);
+    console.log(req.body)
+
     // pune erorile din req in obiectul errors 
     const errors = validationResult(req);
     // 1) Daca nu exista erori => 
