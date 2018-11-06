@@ -3,7 +3,9 @@ const recipeList = document.getElementById("recipeList");
 const update = document.getElementById("edit-form-submit");
 const foto = document.getElementById("foto");
 
-// actiunea de Save la formularul de "Edit"
+/**
+ * Actiunea de Save la formularul de "Create"
+ */ 
 submit.addEventListener("click", (event)=>{
    
     event.preventDefault(); //anuleaza efectul default al butonului    
@@ -14,17 +16,6 @@ submit.addEventListener("click", (event)=>{
     formData.append('ingredients', document.getElementById('ingredients').value);
     formData.append('directions', document.getElementById('directions').value);
     formData.append('foto', foto.files[0]);
-
-    // trimitele datele din formular prin POST, in format JSON
-    // fetch('/recipes/create', {
-    //     method: 'POST',
-    //     headers: {'Content-Type': 'application/json'},
-    //     body: JSON.stringify({
-    //         title: document.getElementById('title').value,
-    //         ingredients: document.getElementById('ingredients').value,
-    //         directions: document.getElementById('directions').value
-    //     })
-    // })
 
     fetch('/recipes/create', {
       method: 'POST',
@@ -64,10 +55,13 @@ submit.addEventListener("click", (event)=>{
     .catch(err => {
       console.log(err);
     });
-})
+});
 
-// Actiunea pentru butonul de "Delete" 
-// este ascultat elementul parinte, care contine toata lista
+/**
+ * Actiunea de click pe butonul "Delete" din lista de elemente
+ * 
+ * Este ascultat elementul parinte, care incadreaza toata lista de elemente HTML
+ */
 recipeList.addEventListener("click", (event)=>{
   if (event.target.value === "delete" ){
 
@@ -87,8 +81,8 @@ recipeList.addEventListener("click", (event)=>{
 });
 
 /**
- * Actiunea pentru butonul de "Edit" 
- * este ascultat elementul parinte, care contine toata lista
+ * Actiunea de click pe butonul "Edit", din lista 
+ * Este ascultat elementul parinte, care contine toata lista
  */ 
 recipeList.addEventListener("click", (event)=>{
   if (event.target.value === "edit" ){
@@ -103,7 +97,9 @@ recipeList.addEventListener("click", (event)=>{
 });
 
 
-//actiunea de Save la formularul de "Edit"
+/**
+ * Actiunea de Save la formularul de "Edit"
+ */
 
 update.addEventListener("click", (event)=>{
 
@@ -123,5 +119,4 @@ update.addEventListener("click", (event)=>{
         window.location.href = '/recipes';
       }     
     })
-
 })
