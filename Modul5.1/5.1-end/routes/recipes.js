@@ -51,17 +51,18 @@ router.post('/create', upload.single('foto'), [
     //      - seteaza un flash message
     //      - trimite un raspuns json de succes
     if (errors.isEmpty()) {  
+      
       queries.createRecipe(req.file.originalname, req.body.title, req.body.ingredients, req.body.directions)
-      .then( data => {
-        req.session.flashMessage = 'Ai introdus o noua reteta';
+        .then( data => {
+          req.session.flashMessage = 'Ai introdus o noua reteta';
 
-        fs.writeFile('public/uploads/'+ req.file.originalname, req.file.buffer, (err) =>{
-          if (err) throw err;
-          res.json({ // trimite un raspuns JSON formularului din front-end
-            succes: true
-          });
-        })            
-      })
+          fs.writeFile('public/uploads/'+ req.file.originalname, req.file.buffer, (err) =>{
+            if (err) throw err;
+            res.json({ // trimite un raspuns JSON formularului din front-end
+              succes: true
+            });
+          })            
+        })
       .catch(error => console.log(error));
     }  
     // 2) Daca exista erori => 
@@ -79,7 +80,7 @@ router.post('/create', upload.single('foto'), [
  */
 router.delete('/delete/:id', async (req, res) => { 
     try{
-        await queries.deleteRecipe(req.params.id)
+        await queries.deleteRecipe(req.params.id);
         req.session.flashMessage = 'Ai sters cu succes reteta ';
         res.sendStatus(200);
     } catch(err){
