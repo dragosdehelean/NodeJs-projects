@@ -93,6 +93,18 @@ recipeList.addEventListener("click", (event)=>{
     document.getElementById('edit-form-title').value = event.target.dataset.title;
     document.getElementById('edit-form-ingredients').value = event.target.dataset.ingredients;
     document.getElementById('edit-form-directions').value = event.target.dataset.directions;
+
+    const fotoBox = document.getElementById("fotoBox");
+
+
+    fotoBox.innerHTML = `
+      <hr>
+      <img src="static/uploads/${event.target.dataset.foto}" class="img-fluid" >
+      <div class="form-group">
+        <label for="foto" class="col-form-label">Schimba imaginea</label>
+        <input type="file" class="form-control" id="foto" name="foto" >
+      </div>
+      `;
   } 
 });
 

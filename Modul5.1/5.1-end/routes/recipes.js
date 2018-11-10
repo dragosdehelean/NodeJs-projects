@@ -2,6 +2,7 @@ const express = require('express');
 const { check, validationResult } = require('express-validator/check'); // validare
 const queries = require('../data/recipes_queries.js');
 const multer = require('multer');
+const fs = require('fs');
 
 // initializeaza o aplicatie Express
 const router = express.Router();
@@ -20,10 +21,10 @@ function fileFilter(req, file, cb){
   }
 }
 const storage = multer.memoryStorage();
-const upload = multer({ storage: storage, fileFilter: fileFilter, limits: {fileSize: 50000} });
+const upload = multer({ storage: storage, fileFilter: fileFilter, limits: {fileSize: 500000} });
 
 /**
- * Ruta pentru indexul retelor
+ * Ruta pentru indexul "Recipes"
  */
 router.get('/', async (req, res) => { 
     const recipes = await queries.all_recipes();
@@ -39,9 +40,9 @@ router.post('/create', upload.single('foto'), [
     check('directions', 'Trebuie sa introduci indicatiile de preparare').isLength({ min: 2 })
     ], (req, res) => {
 
-    console.log(req.file.buffer);
     console.log(req.headers['content-type']);
-    console.log(req.body)
+    console.log(req.file.buffer);
+    console.log(req.body);
 
     // pune erorile din req in obiectul errors 
     const errors = validationResult(req);
@@ -50,22 +51,25 @@ router.post('/create', upload.single('foto'), [
     //      - seteaza un flash message
     //      - trimite un raspuns json de succes
     if (errors.isEmpty()) {  
-        queries.createRecipe(req.body.title, req.body.ingredients, req.body.directions)
-        .then( data => {
-            req.session.flashMessage = 'Ai introdus o noua reteta';
-            res.json({ // trimite un raspuns JSON formularului din front-end
+      queries.createRecipe(req.file.originalname, req.body.title, req.body.ingredients, req.body.directions)
+      .then( data => {
+        req.session.flashMessage = 'Ai introdus o noua reteta';
+
+        fs.writeFile('public/uploads/'+ req.file.originalname, req.file.buffer, (err) =>{
+          if (err) throw err;
+          res.json({ // trimite un raspuns JSON formularului din front-end
             succes: true
-            });
-        })
-        .catch(error => console.log(error));
+          });
+        })            
+      })
+      .catch(error => console.log(error));
     }  
     // 2) Daca exista erori => 
     //    - trimite un raspuns json de esec + datele completate + erorile 
     else {     
         res.json({
-        succes: false,
-        form_data: req.body,
-        errors: errors.mapped()
+          succes: false,
+          errors: errors.mapped()
         });
     }
     });

@@ -58,9 +58,6 @@ app.use(expressSession({
   resave: false
 }));
 
-// seteaza directorul "/public" pentru a afisa asset-uri statice
-app.use('/static', express.static('public'));
-
 
 /**
  * Multer configuration
@@ -91,6 +88,9 @@ function fileFilter(req, file, cb){
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage, fileFilter: fileFilter, limits: {fileSize: 50000} });
 
+
+// seteaza directorul "/public" pentru a afisa asset-uri statice
+app.use('/static', express.static('public'));
 
 /*******************   
 CUSTOM MIDDLEWARES

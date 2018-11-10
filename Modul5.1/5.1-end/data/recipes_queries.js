@@ -38,10 +38,10 @@ module.exports = {
    * Creeaza o noua inregistrare
    * @returns o Promise  
    */
-  createRecipe: (title, ingredients, directions) => {
+  createRecipe: (foto, title, ingredients, directions) => {
     return new Promise((resolve, reject) => { 
-      const sql = 'INSERT INTO recipes (title, ingredients, directions) VALUES (?, ?, ?)';
-      pool.query( sql, [title, ingredients, directions], (error, results) => {
+      const sql = 'INSERT INTO recipes (foto, title, ingredients, directions) VALUES (?, ?, ?, ?)';
+      pool.query( sql, [foto, title, ingredients, directions], (error, results) => {
         if(error) return reject(error);
         resolve(results);        
       }); 
