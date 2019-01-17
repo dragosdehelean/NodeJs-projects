@@ -19,7 +19,7 @@
 
     <!-- BEGIN Accordion-->
     <div class="accordion" id="recipeList">   
-    <% recipes.forEach( recipe => { %>
+    <% recipes.forEach( function(recipe){ %>
       <div class="card">
 
         <div class="card-header" id="heading<%= recipe.recipe_id %>">
